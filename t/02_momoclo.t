@@ -1,9 +1,9 @@
 use strict;
-use Acme::MorningMusume;
+use Acme::MomoiroClover::Z;
 use Test::More qw(no_plan);
 
-my $musume  = Acme::MorningMusume->new;
-my @members = $musume->members;
+my $momoclo_chan = Acme::MomoiroClover::Z->new;
+my @members = $momoclo_chan->members;
 
 for my $member (@members) {
     ok $member,                           $member->name_en;
@@ -19,6 +19,8 @@ for my $member (@members) {
     ok $member->blood_type,               '  blood_type()';
     ok $member->hometown,                 '  hometown()';
     ok ref($member->emoticon) eq 'ARRAY', '  emoticon()';
-    ok $member->class,                    '  class()';
-    ok !$member->graduate_date || $member->graduate_date->isa('Date::Simple'), '  birthday()';
+    ok !$member->graduate_date || $member->graduate_date->isa('Date::Simple'), '  join_daate()';
+    ok $member->join_date->isa('Date::Simple'), '  join_date()';
+    ok $member->can('color'),             '  color()';
+    ok $member->say(''),                  '  say()';
 }

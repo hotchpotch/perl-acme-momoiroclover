@@ -1,7 +1,7 @@
 ---
 abstract: "All about Japanese lock star \"Momoiro Clover\""
 author:
-  - 'Kentaro Kuribayashi, <kentarok@cpan.org>'
+  - 'Yuichi Tateno, <hotchpotch@gmail.com>'
 build_requires:
   ExtUtils::MakeMaker: 6.42
 configure_requires:
@@ -20,7 +20,6 @@ no_index:
 requires:
   Class::Accessor: 0
   Date::Simple: 0
-  WWW::Google::Images: 0
 resources:
   license: http://opensource.org/licenses/mit-license.php
   repository: git://github.com/hotchpotch/perl-acme-momoiroclover.git

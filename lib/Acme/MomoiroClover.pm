@@ -1,65 +1,41 @@
-package Acme::MorningMusume;
+package Acme::MomoiroClover;
 
 use strict;
 use warnings;
 
 use Carp  qw(croak);
 use Date::Simple ();
+use Acme::MomoiroClover::Z;
 
-our $VERSION = '0.13';
+our $VERSION = '0.1';
 
 my @members = qw(
-    FukudaAsuka
-    NakazawaYuko
-    IidaKaori
-    AbeNatsumi
-    IshiguroAya
-    IchiiSayaka
-    YaguchiMari
-    YasudaKei
-    GotohMaki
-    IshikawaRika
-    YoshizawaHitomi
-    TsujiNozomi
-    KagoAi
-    TakahashiAi
-    KonnoAsami
-    OgawaMakoto
-    NiigakiRisa
-    KameiEri
-    TanakaReina
-    MichishigeSayumi
-    FujimotoMiki
-    KusumiKoharu
-    MitsuiAika
-    LiChun
-    QianLin
-    KanonSuzuki
-    ErinaIkuta
-    MizukiFukumura
-    RihoSayashi
+    AriyasuMomoka
+    FujishiroSumire
+    HayamiAkari
+    IkuraManami
+    KashiwaYukina
+    MomotaKanako
+    SasakiAyaka
+    TakagiReni
+    TakaiTsukina
+    TamaiShiori
+    WagawaMiyuu
 );
-
-my @date_joined = map { Date::Simple->new($_) } qw(
-    1997-09-07
-    1998-05-03
-    1999-08-04
-    2000-04-16
-    2001-08-26
-    2003-01-19
-    2005-05-01
-    2006-12-10
-    2011-01-02
-);
-unshift @date_joined, undef;
 
 sub new {
     my $class = shift;
     my $self  = bless {members => []}, $class;
 
+    $self->_check();
     $self->_initialize;
 
     return $self;
+}
+
+sub _check {
+    my $self = shift;
+    Date::Simple::today() <= Acme::MomoiroClover::Z::change_date() or croak('MomoiroClover is obsolete. Please use Acme::MomoiroClover::Z ');
 }
 
 sub members {
@@ -76,7 +52,7 @@ sub members {
     }
     elsif ($type->isa('Date::Simple')) {
         return grep {
-            $date_joined[$_->class] <= $type and
+            $_->join_date <= $type and
             (!$_->graduate_date or $type <= $_->graduate_date)
         } @members;
     }
@@ -111,7 +87,7 @@ sub _initialize {
     my $self = shift;
 
     for my $member (@members) {
-        my $module_name = 'Acme::MorningMusume::'.$member;
+        my $module_name = 'Acme::MomoiroClover::Members::'.$member;
 
         eval qq|require $module_name;|;
         push @{$self->{members}}, $module_name->new;
@@ -131,36 +107,32 @@ __END__
 
 =head1 NAME
 
-Acme::MorningMusume - All about Japanese pop star "Morning Musume"
+Acme::MomoiroClover - All about Japanese lock star "Momoiro Clover"
 
 =head1 SYNOPSIS
 
-  use Acme::MorningMusume;
+  use Acme::MomoiroClover;
 
-  my $musume = Acme::MorningMusume->new;
+  my $momoclo_chan = Acme::Momoiro::Z->new;
 
   # retrieve the members on their activities
-  my @members              = $musume->members;             # retrieve all
-  my @active_members       = $musume->members('active');
-  my @graduate_members     = $musume->members('graduate');
-  my @at_some_time_members = $musume->members(Date::Simple->new('2001-01-01'));
+  my @members              = $momoclo_chan->members;             # retrieve all
+  my @active_members       = $momoclo_chan->members('active');
+  my @graduate_members     = $momoclo_chan->members('graduate');
+  my @at_some_time_members = $momoclo_chan->members(Date::Simple->new('2001-01-01'));
 
   # retrieve the members under some conditions
-  my @sorted_by_age        = $musume->sort('age', 1);
-  my @sorted_by_class      = $musume->sort('class', 1);
-  my @selected_by_age      = $musume->select('age', 18, '>=');
-  my @selected_by_class    = $musume->select('class', 5, '==');
+  my @sorted_by_age        = $momoclo_chan->sort('age', 1);
+  my @sorted_by_class      = $momoclo_chan->sort('class', 1);
+  my @selected_by_age      = $momoclo_chan->select('age', 17, '>=');
+  my @selected_by_class    = $momoclo_chan->select('class', 5, '==');
 
 =head1 DESCRIPTION
 
-"Morning Musume" is one of highly famous Japanese pop stars.
+"Morning Clover" is one of highly famous Japanese lock stars.
 
-It consists of many pretty girls and has been known as a group which
-members change one after another so frequently that people can't
-completely tell who is who in the group.
-
-This module, Acme::MorningMusume, provides an easy method to catch up
-with Morning Musume.
+This module, Acme::MomoiroClover, provides an easy method to catch up
+with Momoiro Clover.
 
 =head1 METHODS
 
@@ -168,9 +140,10 @@ with Morning Musume.
 
 =over 4
 
-  my $musume = Acme::MorningMusume->new;
+  my $momoclo_chan = Acme::MomoiroClover->new; // now obsolete
+  $momoclo_chan = Acme::MomoiroClover::Z->new;
 
-Creates and returns a new Acme::MorningMusume object.
+Creates and returns a new Acme::MomoiroClover::Z object.
 
 =back
 
@@ -184,11 +157,11 @@ Creates and returns a new Acme::MorningMusume object.
   #  + Date::Simple object : members at the time passed in
   #  + undef               : all members
 
-  my @members = $musume->members('active');
+  my @members = $momoclo_chan->members('active');
 
-Returns the members as a list of the L<Acme::MorningMusume::Base>
+Returns the members as a list of the L<Acme::MomoiroClover::Base>
 based object represents each member. See also the documentation of
-L<Acme::MorningMusume::Base> for more details.
+L<Acme::MomoiroClover::Base> for more details.
 
 =back
 
@@ -197,14 +170,14 @@ L<Acme::MorningMusume::Base> for more details.
 =over 4
 
   # $type can be one of the values below:
-  #  + age   :  sort by age
-  #  + class :  sort by class
+  #  + age       :  sort by age
+  #  + join_date :  sort by join_date
   #
   # $order can be a one of the values below:
   #  + something true value  :  sort in descending order
   #  + something false value :  sort in ascending order
 
-  my @sorted_members = $musume->sort('age', 1); # sort by age in descending order
+  my @sorted_members = $momoclo_chan->sort('age', 1); # sort by age in descending order
 
 Returns the members sorted by the I<$type> field.
 
@@ -215,7 +188,7 @@ Returns the members sorted by the I<$type> field.
 =over 4
 
   # $type can be one of the same values above:
-  my @selected_members = $musume->select('age', 18, '>=');
+  my @selected_members = $momoclo_chan->select('age', 17, '>=');
 
 Returns the members satisfy the given I<$type> condition. I<$operator>
 must be a one of '==', '>=', '<=', '>', and '<'. This method compares
@@ -229,26 +202,30 @@ the given I<$type> to the member's one in the order below:
 
 =over 4
 
-=item * MORNING MUSUME -Hello! Project-
+=item * Momoiro Clover - Official WebPage
 
-L<http://www.helloproject.com/>
+L<http://www.momoclo.net/>
 
-=item * Morning Musume - Wikipedia
+=item * Momoiro Clover Z - Wikipedia
 
-L<http://en.wikipedia.org/wiki/Morning_Musume>
+L<http://ja.wikipedia.org/wiki/%E3%82%82%E3%82%82%E3%81%84%E3%82%8D%E3%82%AF%E3%83%AD%E3%83%BC%E3%83%90%E3%83%BCZ>
 
-=item * L<Acme::MorningMusume::Base>
+=item * L<Acme::MomoiroClover::Members::Base>
 
 =back
 
 =head1 AUTHOR
 
-Kentaro Kuribayashi E<lt>kentaro@cpan.orgE<gt>
+Yuichi TatenoE<lt>hotchpotch@gmail.com<gt>
+
+Based on Acme::MomoiroClover (Kentaro Kuribayashi).
 
 =head1 COPYRIGHT AND LICENSE (The MIT License)
 
-Copyright (c) 2005 - 2009, Kentaro Kuribayashi
-E<lt>kentaro@cpan.orgE<gt>
+Copyright (c) 2011, Yuichi Tateno
+E<lt>hotchpotch@gmail.com<gt>
+
+Original Copyright, Kentaro Kuribayashi.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

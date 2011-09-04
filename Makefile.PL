@@ -1,13 +1,13 @@
 use inc::Module::Install;
 
-name     'Acme-MorningMusume';
-author   'Kentaro Kuribayashi, <kentarok@cpan.org>';
+name     'Acme-MomoiroClover';
+author   'Yuichi Tateno, <hotchpotch@gmail.com>';
 license  'MIT';
-all_from 'lib/Acme/MorningMusume.pm';
+all_from 'lib/Acme/MomoiroClover.pm';
 
 requires 'Class::Accessor';
 requires 'Date::Simple';
-requires 'WWW::Google::Images';
+requires 'Test::Exception';
 
 author_tests   'xt';
 auto_set_repository;
