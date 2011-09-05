@@ -2,8 +2,9 @@ package Acme::MomoiroClover::Members::AriyasuMomoka;
 
 use strict;
 use warnings;
+use Time::Piece;
 
-use base qw(Acme::MomoiroClover::Members::Base);
+use parent qw(Acme::MomoiroClover::Members::Base);
 
 sub info {
     return (
@@ -12,12 +13,12 @@ sub info {
         family_name_en => 'Ariyasu',
         first_name_en  => 'Momoka',
         nick           => [qw(ももか)],
-        birthday       => Date::Simple->new('1995-03-15'),
+        birthday       => localtime(Time::Piece->strptime('1995-03-15', '%Y-%m-%d'))->epoch,
         blood_type     => 'A',
         hometown       => '埼玉県',
         emoticon       => [],
         graduate_date  => undef,
-        join_date      => Date::Simple->new('2009-07-26'),
+        join_date      => localtime(Time::Piece->strptime('2009-07-26', '%Y-%m-%d'))->epoch,
         color          => 'green',
     );
 }

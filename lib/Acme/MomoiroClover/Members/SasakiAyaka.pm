@@ -2,8 +2,9 @@ package Acme::MomoiroClover::Members::SasakiAyaka;
 
 use strict;
 use warnings;
+use Time::Piece;
 
-use base qw(Acme::MomoiroClover::Members::Base);
+use parent qw(Acme::MomoiroClover::Members::Base);
 
 sub info {
     return (
@@ -12,12 +13,12 @@ sub info {
         family_name_en => 'Sasaki',
         first_name_en  => 'Ayaka',
         nick           => [qw(あーりん)],
-        birthday       => Date::Simple->new('1996-06-11'),
+        birthday       => localtime(Time::Piece->strptime('1996-06-11', '%Y-%m-%d'))->epoch,
         blood_type     => 'AB',
         hometown       => '東京都',
         emoticon       => [],
         graduate_date  => undef,
-        join_date      => Date::Simple->new('2008-11-23'),
+        join_date      => localtime(Time::Piece->strptime('2008-11-23', '%Y-%m-%d'))->epoch,
         color          => 'pink',
     );
 }
