@@ -2,9 +2,8 @@ package Acme::MomoiroClover::Members::IkuraManami;
 
 use strict;
 use warnings;
-use Time::Piece;
 
-use parent qw(Acme::MomoiroClover::Members::Base);
+use base qw(Acme::MomoiroClover::Members::Base);
 
 sub info {
     return (
@@ -13,12 +12,12 @@ sub info {
         family_name_en => 'Ikura',
         first_name_en  => 'Manami',
         nick           => [],
-        birthday       => localtime(Time::Piece->strptime('1994-02-04', '%Y-%m-%d'))->epoch,
+        birthday       => Date::Simple->new('1994-02-04'),
         blood_type     => 'AB',
         hometown       => '埼玉県',
         emoticon       => [],
-        graduate_date  => localtime(Time::Piece->strptime('2008-12-29', '%Y-%m-%d'))->epoch,
-        join_date      => localtime(Time::Piece->strptime('2008-05-17', '%Y-%m-%d'))->epoch,
+        graduate_date  => Date::Simple->new('2008-12-29'),
+        join_date      => Date::Simple->new('2008-05-17'),
         color          => undef,
     );
 }

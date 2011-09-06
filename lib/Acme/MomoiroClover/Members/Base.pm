@@ -2,8 +2,8 @@ package Acme::MomoiroClover::Members::Base;
 
 use strict;
 use warnings;
-use Time::Piece;
-use parent qw(Class::Accessor);
+use Date::Simple ();
+use base qw(Class::Accessor);
 
 our $ansi_colors = {
   red    => "\x1b[38;5;1m",
@@ -55,26 +55,26 @@ sub _initialize {
     my %info = $self->info;
 
     $self->{$_}      = $info{$_} for keys %info;
-    for my $time_piece (qw/birthday graduate_date join_date/) {
-        $self->{$time_piece} = localtime($self->{$time_piece}) if $self->{$time_piece};
-    }
     $self->{name_ja} = $self->family_name_ja.$self->first_name_ja;
     $self->{name_en} = $self->first_name_en.' '.$self->family_name_en;
+    $self->{age}     = $self->_calculate_age;
 
     return 1;
 }
 
-sub age {
-    my $self = shift;
-    $self->{age} ||= $self->_calculate_age;
-}
-
 sub _calculate_age {
     my $self  = shift;
-    my $now = Time::Piece->new;
-    my $birthday = localtime($self->birthday);
+    my $today = Date::Simple::today;
 
-    return int do { $now - $birthday }->years;
+    if (($today->month - $self->birthday->month) >= 0) {
+        if (($today->day - $self->birthday->day  ) >= 0) {
+            return $today->year - $self->birthday->year;
+        } else {
+            return ($today->year - $self->birthday->year) - 1;
+        }
+    } else {
+        return ($today->year - $self->birthday->year) - 1;
+    }
 }
 
 1;
@@ -104,13 +104,13 @@ member of Momoiro Clover
       my $first_name_en  = $member->first_name_en;
       my $family_name_en = $member->family_name_en;
       my $nick           = $member->nick;           # arrayref
-      my $birthday       = $member->birthday;       # Time::Piece object
+      my $birthday       = $member->birthday;       # Date::Simple object
       my $age            = $member->age;
       my $blood_type     = $member->blood_type;
       my $hometown       = $member->hometown;
       my $emoticon       = $member->emoticon;       # arrayref
-      my $graduate_date  = $member->graduate_date;  # Time::Piece object
-      my $join_date      = $member->join_date;      # Time::Piece object
+      my $graduate_date  = $member->graduate_date;  # Date::Simple object
+      my $join_date      = $member->join_date;      # Date::Simple object
       my $color          = $member->color;
 
       $member->say('momoclo chan!!');
@@ -165,7 +165,7 @@ member of Momoiro Clover.
 
 =over 4
 
-=item * L<Time::Piece>
+=item * L<Date::Simple>
 
 =back
 

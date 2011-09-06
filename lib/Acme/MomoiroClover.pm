@@ -3,11 +3,11 @@ package Acme::MomoiroClover;
 use strict;
 use warnings;
 
-use Carp qw(croak);
-use Time::Piece;
+use Carp  qw(croak);
+use Date::Simple ();
+use Acme::MomoiroClover::Z;
 
 our $VERSION = '0.1';
-our $change_date = localtime(Time::Piece->strptime('2011-04-10', '%Y-%m-%d'));
 
 my @members = qw(
     AriyasuMomoka
@@ -35,8 +35,7 @@ sub new {
 
 sub _check {
     my $self = shift;
-    croak('MomoiroClover is obsolete. Please use Acme::MomoiroClover::Z')
-        unless Time::Piece->new < $change_date;
+    Date::Simple::today() <= Acme::MomoiroClover::Z::change_date() or croak('MomoiroClover is obsolete. Please use Acme::MomoiroClover::Z ');
 }
 
 sub members {
@@ -51,7 +50,7 @@ sub members {
     elsif ($type eq 'graduate') {
         return grep {$_->graduate_date}  @members;
     }
-    elsif ($type->isa('Time::Piece')) {
+    elsif ($type->isa('Date::Simple')) {
         return grep {
             $_->join_date <= $type and
             (!$_->graduate_date or $type <= $_->graduate_date)
@@ -76,7 +75,7 @@ sub select {
     my ($self, $type, $number, $operator, @members) = @_;
 
     $self->_die('invalid operator was passed in')
-        unless grep {$operator eq $_} qw(== >= <= > < eq ne);
+        unless grep {$operator eq $_} qw(== >= <= > <);
 
     @members = $self->members unless @members;
     my $compare = eval "(sub { \$number $operator \$_[0] })";
@@ -120,7 +119,7 @@ Acme::MomoiroClover - All about Japanese lock star "Momoiro Clover"
   my @members              = $momoclo_chan->members;             # retrieve all
   my @active_members       = $momoclo_chan->members('active');
   my @graduate_members     = $momoclo_chan->members('graduate');
-  my @at_some_time_members = $momoclo_chan->members(Time::Piece->strptime('2001-01-01', '%Y-%m-%d'));
+  my @at_some_time_members = $momoclo_chan->members(Date::Simple->new('2001-01-01'));
 
   # retrieve the members under some conditions
   my @sorted_by_age        = $momoclo_chan->sort('age', 1);
@@ -155,7 +154,7 @@ Creates and returns a new Acme::MomoiroClover::Z object.
   # $type can be one of the values below:
   #  + active              : active members
   #  + graduate            : graduate members
-  #  + Time::Piece object  : members at the time passed in
+  #  + Date::Simple object : members at the time passed in
   #  + undef               : all members
 
   my @members = $momoclo_chan->members('active');

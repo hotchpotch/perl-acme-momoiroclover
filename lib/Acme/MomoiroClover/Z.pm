@@ -3,18 +3,19 @@ package Acme::MomoiroClover::Z;
 use strict;
 use warnings;
 
-use Carp qw(croak);
-use Time::Piece;
+use Carp  qw(croak);
+use Date::Simple ();
 
-use parent qw(Acme::MomoiroClover);
+use base qw(Acme::MomoiroClover);
+
+our $change_date = Date::Simple->new('2011-04-10');
 
 sub _check {
-    croak('MomoiroClover Z is not found yet.')
-        unless localtime >= shift->change_date();
+    Date::Simple::today() >= shift->change_date() or croak('MomoiroClover Z is not found yet.');
 }
 
 sub change_date {
-    $Acme::MomoiroClover::change_date;
+    $change_date;
 }
 
 1;
