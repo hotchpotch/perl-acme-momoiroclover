@@ -6,7 +6,7 @@ license  'MIT';
 all_from 'lib/Acme/MomoiroClover.pm';
 
 requires 'Class::Accessor';
-requires 'Date::Simple';
+requires 'Time::Piece';
 requires 'Test::Exception';
 
 author_tests   'xt';
