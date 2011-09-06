@@ -66,12 +66,14 @@ sub _calculate_age {
     my $self  = shift;
     my $today = Date::Simple::today;
 
-    if (($today->month - $self->birthday->month) >= 0) {
-        if (($today->day - $self->birthday->day  ) >= 0) {
+    if (($today->month - $self->birthday->month) == 0) {
+        if (($today->day - $self->birthday->day) >= 0) {
             return $today->year - $self->birthday->year;
         } else {
             return ($today->year - $self->birthday->year) - 1;
         }
+    } elsif (($today->month - $self->birthday->month) > 0) {
+        return $today->year - $self->birthday->year;
     } else {
         return ($today->year - $self->birthday->year) - 1;
     }
