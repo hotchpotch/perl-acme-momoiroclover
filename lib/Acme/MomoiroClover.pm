@@ -7,7 +7,7 @@ use Carp  qw(croak);
 use Date::Simple ();
 use Acme::MomoiroClover::Z;
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 my @members = qw(
     AriyasuMomoka
