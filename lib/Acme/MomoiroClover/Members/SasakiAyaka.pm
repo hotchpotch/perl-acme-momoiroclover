@@ -14,7 +14,7 @@ sub info {
         nick           => [qw(あーりん)],
         birthday       => Date::Simple->new('1996-06-11'),
         blood_type     => 'AB',
-        hometown       => '東京都',
+        hometown       => '神奈川県',
         emoticon       => [],
         graduate_date  => undef,
         join_date      => Date::Simple->new('2008-11-23'),
