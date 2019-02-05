@@ -16,7 +16,7 @@ sub info {
         blood_type     => 'A',
         hometown       => '埼玉県',
         emoticon       => [],
-        graduate_date  => undef,
+        graduate_date  => Date::Simple->new('2018-01-21'),
         join_date      => Date::Simple->new('2009-07-26'),
         color          => 'green',
     );
